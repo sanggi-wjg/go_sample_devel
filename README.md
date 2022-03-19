@@ -22,7 +22,4 @@ export YOUTUBE_CHANNEL_ID="xxxx"
 # Windows 환경
 Run > Edit Configurations
 Environment variables 추가
-
-id=UCV9WL7sW6_KjanYkUUaIDfQ 
-key=AIzaSyAEaY6vSNjZ1VXeJYBW_8F8psYQq-X6Kkc
 ```
