@@ -11,23 +11,23 @@ import (
 
 type Response struct {
 	Kind  string `json:"kind"`
-	Items []Item `json:"items"`
+	Items []item `json:"items"`
 }
 
-type Item struct {
+type item struct {
 	Kind string     `json:"kind"`
 	Id   string     `json:"id"`
-	Stat Statistics `json:"statistics"`
+	Stat statistics `json:"statistics"`
 }
 
-type Statistics struct {
+type statistics struct {
 	ViewCount             string `json:"viewCount"`
 	SubscriberCount       string `json:"subscriberCount"`
 	HiddenSubscriberCount bool   `json:"hiddenSubscriberCount"`
 	VideoCount            string `json:"videoCount"`
 }
 
-func createYoutubeReq(resource string) (*http.Request, error) {
+func request(resource string) (*Response, error) {
 	req, err := http.NewRequest("GET", "https://www.googleapis.com/youtube/v3/"+resource, nil)
 	if err != nil {
 		log.Fatalln(err)
@@ -40,39 +40,33 @@ func createYoutubeReq(resource string) (*http.Request, error) {
 	q.Add("key", os.Getenv("YOUTUBE_KEY"))
 	req.URL.RawQuery = q.Encode()
 
-	return req, nil
-}
-
-func request(req *http.Request) (Response, error) {
-	var response Response
-
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalln(err)
-		return response, err
+		return nil, err
 	}
-	//fmt.Println("response status: ", resp.Status)
 	defer resp.Body.Close()
+	//fmt.Println("response status: ", resp.Status)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	//fmt.Println("Body:", string(body))
 	if err != nil {
 		log.Fatalln(err)
-		return response, err
+		return nil, err
 	}
 
+	var response Response
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		log.Fatalln(err)
-		return response, err
+		return nil, err
 	}
-	return response, nil
+	return &response, nil
 }
 
-func GetYoutubeSubscribers(c *gin.Context) {
-	req, _ := createYoutubeReq("channels")
-	resp, err := request(req)
+func GetYoutubeChannelStat(c *gin.Context) {
+	resp, err := request("channels")
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message":         "failure",
@@ -81,7 +75,7 @@ func GetYoutubeSubscribers(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"message":         "success",
-		"subscriberCount": resp.Items[0].Stat.SubscriberCount,
+		"message": "success",
+		"stat":    resp.Items[0].Stat,
 	})
 }

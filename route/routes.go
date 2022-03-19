@@ -12,7 +12,7 @@ func SetupRoutes() *gin.Engine {
 	r.GET("/", home.Home)
 	r.GET("/ping", home.Ping)
 
-	r.GET("/youtube/subs/count", youtube.GetYoutubeSubscribers)
+	r.GET("/youtube/subs/count", youtube.GetYoutubeChannelStat)
 
 	return r
 }

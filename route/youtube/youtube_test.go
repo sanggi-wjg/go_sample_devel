@@ -2,6 +2,7 @@ package youtube
 
 import (
 	"fmt"
+	"github.com/go-playground/assert/v2"
 	"testing"
 )
 
@@ -28,15 +29,17 @@ import (
 }*/
 
 func TestRequest(t *testing.T) {
-	req, _ := createYoutubeReq("channels")
-	resp, _ := request(req)
+	resp, err := request("channels")
 	fmt.Println("Request-Response:", resp)
+
+	assert.Equal(t, err, nil)
 }
 
 func TestGetSubscriberCount(t *testing.T) {
-	req, _ := createYoutubeReq("channels")
-	resp, _ := request(req)
+	resp, err := request("channels")
 
 	fmt.Println(resp.Items)
 	fmt.Println(resp.Items[0].Stat.SubscriberCount)
+
+	assert.Equal(t, err, nil)
 }
