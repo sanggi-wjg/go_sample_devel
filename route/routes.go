@@ -2,6 +2,9 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"go_sample_devel/docs"
 	"go_sample_devel/route/home"
 	"go_sample_devel/route/youtube"
 )
@@ -9,10 +12,21 @@ import (
 func SetupRoutes() *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/", home.Home)
+	// swagger
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	v1 := r.Group("/api/v1")
+	{
+		eg := v1.Group("")
+		{
+			eg.GET("/", home.Home)
+		}
+	}
+
 	r.GET("/ping", home.Ping)
 
-	r.GET("/youtube/subs/count", youtube.GetYoutubeChannelStat)
+	// youtube
+	r.GET("/youtube/channel/stat", youtube.GetYoutubeChannelStat)
 
 	return r
 }
