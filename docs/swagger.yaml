@@ -1,0 +1,19 @@
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: home index
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Home
+      tags:
+      - Basic
+swagger: "2.0"
