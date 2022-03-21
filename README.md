@@ -25,11 +25,17 @@ Run > Edit Configurations
 Environment variables 추가
 ```
 
-* gin - swagger 연동
+* gin - swagger 연동  
 http://localhost:9091/swagger/index.html 접속하면 됨
 ```shell
 https://github.com/swaggo/gin-swagger
 
 # Windows 환경
 export PATH=$(go env GOPATH)/bin:$PATH
+```
+* route / benchmark
+
+* route / scrap
+```shell
+https://github.com/PuerkitoBio/goquery
 ```
