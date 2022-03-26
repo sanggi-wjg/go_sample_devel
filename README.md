@@ -76,3 +76,9 @@ export PATH=$(go env GOPATH)/bin:$PATH
 https://github.com/PuerkitoBio/goquery
 ```
 </details>
+
+### 참고
+```shell
+GORM test with sql mock 
+https://github.com/go-gorm/gorm/issues/3565
+```

@@ -24,6 +24,7 @@ func Setup() error {
 	}
 
 	DB = db
+	Migrate()
 	return nil
 }
 

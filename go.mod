@@ -1,6 +1,6 @@
 module go_sample_devel
 
-go 1.18
+go 1.17
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
@@ -9,6 +9,7 @@ require (
 	github.com/swaggo/gin-swagger v1.4.1
 	github.com/swaggo/swag v1.8.0
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
+	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
 	gorm.io/driver/mysql v1.3.2
 	gorm.io/gorm v1.23.3
 )
