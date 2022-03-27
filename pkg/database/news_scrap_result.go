@@ -16,14 +16,20 @@ func (NewsScrapResult) TableName() string {
 	return "news_scrap_results"
 }
 
-func (n *NewsScrapResult) Create() error {
-	//news := NewsScrapResult{Href: "https://naver.com", Title: "NewTitle"}
-	//news.Create()
-	res := DB.Create(n)
-	return res.Error
-}
-
-func (n *NewsScrapResult) Upsert() error {
-	res := DB.Save(n)
-	return res.Error
-}
+//func CreateNewsScrapResult(href, title string) (*NewsScrapResult, error) {
+//	news := NewsScrapResult{Href: href, Title: title}
+//	res := GetDB().Create(&news)
+//	return &news, res.Error
+//}
+//
+//func (n *NewsScrapResult) Create() error {
+//	//news := NewsScrapResult{Href: "https://naver.com", Title: "NewTitle"}
+//	//news.Create()
+//	res := db.Create(&n)
+//	return res.Error
+//}
+//
+//func (n *NewsScrapResult) Upsert() error {
+//	res := db.Save(n)
+//	return res.Error
+//}

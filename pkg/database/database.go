@@ -10,10 +10,10 @@ import (
 	"time"
 )
 
-var DB *gorm.DB
+var db *gorm.DB
 
 func Setup() error {
-	db, err := gorm.Open(
+	conn, err := gorm.Open(
 		mysql.Open(getDatabaseDSN()),
 		&gorm.Config{
 			Logger: getGormLogger(),
@@ -23,9 +23,13 @@ func Setup() error {
 		return err
 	}
 
-	DB = db
+	db = conn
 	Migrate()
 	return nil
+}
+
+func GetDB() *gorm.DB {
+	return db
 }
 
 func getDatabaseDSN() string {

@@ -6,29 +6,32 @@ import (
 )
 
 func TestCreateNewsScrapResult(t *testing.T) {
-	suite := createSQLMock()
+	//suite := createTestSuite()
 
-	// given
-	news := NewsScrapResult{Href: "https://123123.com"}
+	news := NewsScrapResult{Href: "https://222.com", Title: "NewTitleIS"}
+	//res := suite.db.Create(&news)
+	err := news.Create()
+	fmt.Println(news.Id, news.Href, news.Title)
 
-	// when
-	//suite.mock.MatchExpectationsInOrder(false)
-	//suite.mock.ExpectBegin()
-
-	suite.db.Create(&news)
-
-	//suite.mock.ExpectCommit()
-	//if res.Error != nil {
-	//	t.Error(res.Error)
-	//}
-
-	//suite.mock.ExpectRollback()
-
-	// then
-	err := suite.mock.ExpectationsWereMet()
 	if err != nil {
-		t.Errorf("Failed to meet expectations, got error: %v", err)
+		t.Error(err)
 	}
+
+	//db, mock, err := sqlmock.New()
+	//if err != nil {
+	//	t.Errorf("sql mock error: %v", err)
+	//}
+	//defer db.Close()
+	//
+	//news, err := CreateNewsScrapResult("https://123.com", "ThisIsTitle")
+	//if err != nil {
+	//	t.Error(err)
+	//}
+	//fmt.Println(news)
+	//
+	//if err = mock.ExpectationsWereMet(); err != nil {
+	//	t.Errorf("there were unfulfilled expectations: %s", err)
+	//}
 }
 
 func TestGoCreateNewsScrapResults(t *testing.T) {

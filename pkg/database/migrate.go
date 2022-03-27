@@ -6,8 +6,8 @@ import (
 
 func Migrate() {
 	news := &NewsScrapResult{}
-	if !DB.Migrator().HasTable(news) {
-		err := DB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(NewsScrapResult{})
+	if !db.Migrator().HasTable(news) {
+		err := db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(NewsScrapResult{})
 		if err != nil {
 			log.Fatalln(err)
 		}

@@ -2,8 +2,8 @@ package database
 
 import (
 	"database/sql"
-	"gopkg.in/DATA-DOG/go-sqlmock.v1"
-	"gorm.io/driver/mysql"
+	"github.com/DATA-DOG/go-sqlmock"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"log"
 	"testing"
@@ -15,7 +15,7 @@ type Suite struct {
 	//newsScrapResult NewsScrapResult
 }
 
-func createSQLMock() *Suite {
+func createTestSuite() *Suite {
 	suite := &Suite{}
 	var (
 		db  *sql.DB
@@ -32,14 +32,15 @@ func createSQLMock() *Suite {
 		log.Fatal("suite mock is null")
 	}
 
-	dialect := mysql.New(mysql.Config{
-		DSN:                       "sqlmock_db_0",
-		DriverName:                "mysql",
-		Conn:                      db,
-		ServerVersion:             "8.0.27",
-		SkipInitializeWithVersion: true,
-	})
-	suite.db, err = gorm.Open(dialect, &gorm.Config{})
+	//dialect := mysql.New(mysql.Config{
+	//	DSN:                       "sqlmock_db_0",
+	//	DriverName:                "mysql",
+	//	Conn:                      db,
+	//	ServerVersion:             "8.0.27",
+	//	SkipInitializeWithVersion: true,
+	//})
+	//suite.db, err = gorm.Open(dialect, &gorm.Config{})
+	suite.db, err = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("fail to open gorm db: %v", err)
 	}
@@ -50,6 +51,6 @@ func createSQLMock() *Suite {
 	return suite
 }
 
-func TestCreateSQLMock(t *testing.T) {
-	createSQLMock()
+func TestCreateTestSuite(t *testing.T) {
+	createTestSuite()
 }
