@@ -4,7 +4,7 @@ import (
 	"log"
 )
 
-func Migrate() {
+func MigrateTables() {
 	news := &NewsScrapResult{}
 	if !db.Migrator().HasTable(news) {
 		err := db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(NewsScrapResult{})

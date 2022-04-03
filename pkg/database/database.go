@@ -24,7 +24,7 @@ func Setup() error {
 	}
 
 	db = conn
-	Migrate()
+	MigrateTables()
 	return nil
 }
 

@@ -48,7 +48,18 @@ func createTestSuite() *Suite {
 		log.Fatal("gorm db is null")
 	}
 	//defer db.Close()
+
+	// migrate
+	suite.migrateMockTables()
+
 	return suite
+}
+
+func (s Suite) migrateMockTables() {
+	err := s.db.AutoMigrate(NewsScrapResult{})
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func TestCreateTestSuite(t *testing.T) {

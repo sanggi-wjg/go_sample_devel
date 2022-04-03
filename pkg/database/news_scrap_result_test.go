@@ -6,32 +6,25 @@ import (
 )
 
 func TestCreateNewsScrapResult(t *testing.T) {
-	//suite := createTestSuite()
+	suite := createTestSuite()
 
 	news := NewsScrapResult{Href: "https://222.com", Title: "NewTitleIS"}
-	//res := suite.db.Create(&news)
-	err := news.Create()
-	fmt.Println(news.Id, news.Href, news.Title)
+	res := suite.db.Create(&news)
 
+	fmt.Println(news.Id, news.Href, news.Title)
+	fmt.Println(res)
+}
+
+func TestNewsScrapResultList(t *testing.T) {
+	suite := createTestSuite()
+	repo := NewRepository(suite.db)
+
+	newsList := &[]NewsScrapResult{}
+	err := repo.FindAll(newsList)
 	if err != nil {
 		t.Error(err)
 	}
-
-	//db, mock, err := sqlmock.New()
-	//if err != nil {
-	//	t.Errorf("sql mock error: %v", err)
-	//}
-	//defer db.Close()
-	//
-	//news, err := CreateNewsScrapResult("https://123.com", "ThisIsTitle")
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//fmt.Println(news)
-	//
-	//if err = mock.ExpectationsWereMet(); err != nil {
-	//	t.Errorf("there were unfulfilled expectations: %s", err)
-	//}
+	fmt.Println(newsList)
 }
 
 func TestGoCreateNewsScrapResults(t *testing.T) {
