@@ -23,12 +23,12 @@ func (NewsScrapResult) TableName() string {
 //}
 //
 
-func (n *NewsScrapResult) Create() error {
-	//news := NewsScrapResult{Href: "https://naver.com", Title: "NewTitle"}
-	//news.Create()
-	res := db.Create(&n)
-	return res.Error
-}
+//func (n *NewsScrapResult) Create() error {
+//	//news := NewsScrapResult{Href: "https://naver.com", Title: "NewTitle"}
+//	//news.Create()
+//	res := db.Create(&n)
+//	return res.Error
+//}
 
 //
 //func (n *NewsScrapResult) Upsert() error {

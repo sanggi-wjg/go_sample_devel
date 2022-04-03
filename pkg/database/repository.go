@@ -16,12 +16,37 @@ func NewRepository(db *gorm.DB, defaultJoins ...string) *repository {
 	return &repository{db, logrus.New(), defaultJoins}
 }
 
-func (r *repository) FindAll(model interface{}) error {
-	res := r.db.Unscoped().Find(model)
-	return r.HandleError(res)
+var (
+	// ErrNotFound is a convenience reference for the actual GORM error
+	ErrNotFound = gorm.ErrRecordNotFound
+)
+
+func (r *repository) FindAll(entity interface{}) error {
+	res := r.db.Unscoped().Find(entity)
+	return r.handleError(res)
 }
 
-func (r *repository) HandleError(res *gorm.DB) error {
+func (r *repository) FindById(entity interface{}, id uint64) error {
+	res := r.db.Where("id = ?", id).First(entity)
+	return r.handleOneError(res)
+}
+
+func (r *repository) Create(entity interface{}) error {
+	res := r.db.Create(entity)
+	return r.handleError(res)
+}
+
+func (r *repository) handleOneError(res *gorm.DB) error {
+	if err := r.handleError(res); err != nil {
+		return err
+	}
+	if res.RowsAffected != 1 {
+		return ErrNotFound
+	}
+	return nil
+}
+
+func (r *repository) handleError(res *gorm.DB) error {
 	if res.Error != nil && res.Error != gorm.ErrRecordNotFound {
 		err := fmt.Errorf("%w", res.Error)
 		r.logger.Error(err)
