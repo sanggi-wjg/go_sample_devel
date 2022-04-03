@@ -14,14 +14,14 @@ GORM
 
 ### ENV
 ```shell
-YOUTUBE_KEY
-YOUTUBE_CHANNEL_ID
+YOUTUBE_KEY=
+YOUTUBE_CHANNEL_ID=
 
-DB_USER
-DB_PASSWORD
-DB_HOST
-DB_PORT
-DB_DATABASE_NAME
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
+DB_DATABASE_NAME=
 ```
 
 ### Samples
@@ -76,3 +76,10 @@ export PATH=$(go env GOPATH)/bin:$PATH
 https://github.com/PuerkitoBio/goquery
 ```
 </details>
+
+### 참고
+```shell
+GORM test with sql mock 
+https://github.com/DATA-DOG/go-sqlmock
+https://github.com/go-gorm/gorm/issues/3565
+```
