@@ -6,14 +6,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type repository struct {
+type Repository struct {
 	db           *gorm.DB
 	logger       *logrus.Logger
 	defaultJoins []string
 }
 
-func NewRepository(db *gorm.DB, defaultJoins ...string) *repository {
-	return &repository{db, logrus.New(), defaultJoins}
+func NewRepository(db *gorm.DB, defaultJoins ...string) *Repository {
+	return &Repository{db, logrus.New(), defaultJoins}
 }
 
 var (
@@ -21,22 +21,32 @@ var (
 	ErrNotFound = gorm.ErrRecordNotFound
 )
 
-func (r *repository) FindAll(entity interface{}) error {
+// FindAll find all entities
+func (r *Repository) FindAll(entity interface{}) error {
 	res := r.db.Unscoped().Find(entity)
 	return r.handleError(res)
 }
 
-func (r *repository) FindById(entity interface{}, id uint64) error {
+// FindById find by id entity
+func (r *Repository) FindById(entity interface{}, id uint64) error {
 	res := r.db.Where("id = ?", id).First(entity)
 	return r.handleOneError(res)
 }
 
-func (r *repository) Create(entity interface{}) error {
+// Create : create entity
+func (r *Repository) Create(entity interface{}) error {
 	res := r.db.Create(entity)
 	return r.handleError(res)
 }
 
-func (r *repository) handleOneError(res *gorm.DB) error {
+// Upsert update or create entity
+func (r *Repository) Upsert(entity interface{}) error {
+	res := r.db.Save(entity)
+	return r.handleError(res)
+}
+
+// handleOneError handle one case
+func (r *Repository) handleOneError(res *gorm.DB) error {
 	if err := r.handleError(res); err != nil {
 		return err
 	}
@@ -46,7 +56,8 @@ func (r *repository) handleOneError(res *gorm.DB) error {
 	return nil
 }
 
-func (r *repository) handleError(res *gorm.DB) error {
+// handleError handle common case
+func (r *Repository) handleError(res *gorm.DB) error {
 	if res.Error != nil && res.Error != gorm.ErrRecordNotFound {
 		err := fmt.Errorf("%w", res.Error)
 		r.logger.Error(err)

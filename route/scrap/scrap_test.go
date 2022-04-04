@@ -16,36 +16,35 @@ func TestScarpNaverNews(t *testing.T) {
 func TestSaveScarpResult(t *testing.T) {
 	// given
 	scarpNewsResultList := GetScrapNaverNewsResult()
-	for _, res := range scarpNewsResultList {
-		fmt.Println(res)
-	}
+	//for _, res := range scarpNewsResultList {
+	//	fmt.Println(res)
+	//}
 
-	saveResultList := make([]bool, len(scarpNewsResultList))
-	channel := make(chan bool)
+	saveResultList := make([]error, len(scarpNewsResultList))
+	channel := make(chan error)
 
 	// when
-	for i := 0; i < len(scarpNewsResultList); i++ {
-		go save(i, scarpNewsResultList[i], channel)
-	}
-	for i := 0; i < 10; i++ {
-		saveResultList[i] = <-channel
-	}
-	fmt.Println(saveResultList)
-}
-
-func save(i int, newsResult NewsResult, c chan bool) {
-	defer close(c)
-
 	suite := database.CreateSuite()
 	repo := database.NewRepository(suite.GetDB())
 
-	fmt.Println(i)
-	err := repo.Create(&database.NewsScrapResult{
+	for i := 0; i < len(scarpNewsResultList); i++ {
+		go save(repo, scarpNewsResultList[i], channel)
+	}
+	for i := 0; i < len(scarpNewsResultList); i++ {
+		saveResultList[i] = <-channel
+	}
+	fmt.Println(saveResultList)
+	// then
+
+}
+
+func save(repo *database.Repository, newsResult NewsResult, c chan error) {
+	err := repo.Upsert(&database.NewsScrapResult{
 		Href:  newsResult.Href,
 		Title: newsResult.Title,
 	})
 	if err != nil {
-		c <- false
+		c <- err
 	}
-	c <- true
+	c <- nil
 }
