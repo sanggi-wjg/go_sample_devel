@@ -2,7 +2,6 @@ package scrap
 
 import (
 	"errors"
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
@@ -37,7 +36,7 @@ func getNaverNewsDoc() (*goquery.Document, error) {
 	return doc, nil
 }
 
-func GetScrapNaverNewsResult() {
+func GetScrapNaverNewsResult() []NewsResult {
 	doc, err := getNaverNewsDoc()
 	if err != nil {
 		log.Fatalln(err)
@@ -56,7 +55,5 @@ func GetScrapNaverNewsResult() {
 		scrapList = append(scrapList, NewsResult{href, title})
 	})
 
-	for _, res := range scrapList {
-		fmt.Println(res)
-	}
+	return scrapList
 }

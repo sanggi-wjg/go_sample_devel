@@ -68,25 +68,3 @@ func TestFailCaseNewsScrapResultFindById(t *testing.T) {
 	// then
 	assert.Equal(t, err, ErrNotFound)
 }
-
-func TestGoCreateNewsScrapResults(t *testing.T) {
-	//channelResults := make([]NewsScrapResult, 10)
-	//channel := make(chan NewsScrapResult)
-	//
-	//for i := 0; i < 10; i++ {
-	//	go test(i, channel)
-	//}
-	//for i := 0; i < 10; i++ {
-	//	channelResults[i] = <-channel
-	//}
-	//fmt.Println(channelResults)
-}
-
-func test(i int, c chan NewsScrapResult) {
-	defer close(c)
-
-	fmt.Println(i)
-	//news := NewsScrapResult{Href: "https://naver.com", Title: "NewTitle"}
-	//news.Create()
-	//c <- news
-}
