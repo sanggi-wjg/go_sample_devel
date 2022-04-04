@@ -6,11 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
+
 type Repository struct {
 	db           *gorm.DB
 	logger       *logrus.Logger
 	defaultJoins []string
 }
+
 
 func NewRepository(db *gorm.DB, defaultJoins ...string) *Repository {
 	return &Repository{db, logrus.New(), defaultJoins}
@@ -27,17 +29,20 @@ func (r *Repository) FindAll(entity interface{}) error {
 	return r.handleError(res)
 }
 
+
 // FindById find by id entity
 func (r *Repository) FindById(entity interface{}, id uint64) error {
 	res := r.db.Where("id = ?", id).First(entity)
 	return r.handleOneError(res)
 }
 
+
 // Create : create entity
 func (r *Repository) Create(entity interface{}) error {
 	res := r.db.Create(entity)
 	return r.handleError(res)
 }
+
 
 // Upsert update or create entity
 func (r *Repository) Upsert(entity interface{}) error {
