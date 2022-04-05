@@ -3,6 +3,8 @@ package scrap
 import (
 	"errors"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/gin-gonic/gin"
+	"go_sample_devel/pkg/database"
 	"log"
 	"net/http"
 	"strings"
@@ -10,12 +12,18 @@ import (
 )
 
 type NewsResult struct {
-	Href, Title string
+	Href  string `json:"href"`
+	Title string `json:"title"`
 }
 
-func NewNewsResult(href, title string) *NewsResult {
-	s := NewsResult{Href: href, Title: title}
-	return &s
+type SaveNewsResult struct {
+	NewsResult NewsResult `json:"newsResult"`
+	SaveResult bool       `json:"saveResult"`
+}
+
+func (s *SaveNewsResult) SetResult(newsResult NewsResult, saveResult bool) {
+	s.NewsResult = newsResult
+	s.SaveResult = saveResult
 }
 
 func getNaverNewsDoc() (*goquery.Document, error) {
@@ -45,7 +53,6 @@ func GetScrapNaverNewsResult() []NewsResult {
 
 	doc.Find("div.cluster_group").Find("li.cluster_item").Each(func(i int, items *goquery.Selection) {
 		news := items.Find("a")
-
 		href, _ := news.Attr("href")
 		title := strings.TrimSpace(news.Text())
 		if !utf8.ValidString(title) {
@@ -56,4 +63,45 @@ func GetScrapNaverNewsResult() []NewsResult {
 	})
 
 	return scrapList
+}
+
+func GetNaverNews(c *gin.Context) {
+	scrapList := GetScrapNaverNewsResult()
+
+	c.JSON(200, gin.H{
+		"message": "success",
+		"result":  scrapList,
+	})
+}
+
+func SaveNaverNews(c *gin.Context) {
+	scrapList := GetScrapNaverNewsResult()
+	scrapListSize := len(scrapList)
+
+	saveNewsResult := make([]SaveNewsResult, scrapListSize)
+	channel := make(chan bool)
+
+	repo := database.NewRepository(database.GetDB())
+	for i := 0; i < scrapListSize; i++ {
+		go saveNews(repo, scrapList[i], channel)
+	}
+	for i := 0; i < scrapListSize; i++ {
+		saveNewsResult[i].SetResult(scrapList[i], <-channel)
+	}
+
+	c.JSON(200, gin.H{
+		"message": "success",
+		"result":  saveNewsResult,
+	})
+}
+
+func saveNews(repo *database.Repository, newsResult NewsResult, c chan bool) {
+	err := repo.Upsert(&database.NewsScrapResult{
+		Href:  newsResult.Href,
+		Title: newsResult.Title,
+	})
+	if err != nil {
+		c <- false
+	}
+	c <- true
 }

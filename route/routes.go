@@ -6,6 +6,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"go_sample_devel/docs"
 	"go_sample_devel/route/home"
+	"go_sample_devel/route/scrap"
 	"go_sample_devel/route/youtube"
 )
 
@@ -23,7 +24,12 @@ func SetupRoutes() *gin.Engine {
 		}
 	}
 
+	// home
 	r.GET("/ping", home.Ping)
+
+	// scrap
+	r.GET("/scrap/naver/news", scrap.GetNaverNews)
+	r.GET("/scrap/naver/news/save", scrap.SaveNaverNews)
 
 	// youtube
 	r.GET("/youtube/channel/stat", youtube.GetYoutubeChannelStat)

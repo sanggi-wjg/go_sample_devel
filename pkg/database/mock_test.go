@@ -1,7 +1,6 @@
 package database
 
-import (
-
+import "testing"
 
 func TestCreateTestSuite(t *testing.T) {
 	createTestSuite()

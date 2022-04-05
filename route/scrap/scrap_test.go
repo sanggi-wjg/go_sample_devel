@@ -28,7 +28,7 @@ func TestSaveScarpResult(t *testing.T) {
 	repo := database.NewRepository(suite.GetDB())
 
 	for i := 0; i < len(scarpNewsResultList); i++ {
-		go save(repo, scarpNewsResultList[i], channel)
+		go testSave(repo, scarpNewsResultList[i], channel)
 	}
 	for i := 0; i < len(scarpNewsResultList); i++ {
 		saveResultList[i] = <-channel
@@ -38,7 +38,7 @@ func TestSaveScarpResult(t *testing.T) {
 
 }
 
-func save(repo *database.Repository, newsResult NewsResult, c chan error) {
+func testSave(repo *database.Repository, newsResult NewsResult, c chan error) {
 	err := repo.Upsert(&database.NewsScrapResult{
 		Href:  newsResult.Href,
 		Title: newsResult.Title,
