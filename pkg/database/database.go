@@ -12,9 +12,13 @@ import (
 
 var db *gorm.DB
 
-func Setup() error {
+type EnvDatabase struct {
+	User, Password, Host, Port, DatabaseName string
+}
+
+func Setup(e *EnvDatabase) error {
 	conn, err := gorm.Open(
-		mysql.Open(getDatabaseDSN()),
+		mysql.Open(getDatabaseDSN(e)),
 		&gorm.Config{
 			Logger: getGormLogger(),
 		},
@@ -32,13 +36,9 @@ func GetDB() *gorm.DB {
 	return db
 }
 
-func getDatabaseDSN() string {
+func getDatabaseDSN(e *EnvDatabase) string {
 	str := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_DATABASE_NAME"),
+		e.User, e.Password, e.Host, e.Port, e.DatabaseName,
 	)
 	fmt.Println(str)
 	return str
