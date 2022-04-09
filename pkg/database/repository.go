@@ -6,13 +6,11 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type Repository struct {
 	db           *gorm.DB
 	logger       *logrus.Logger
 	defaultJoins []string
 }
-
 
 func NewRepository(db *gorm.DB, defaultJoins ...string) *Repository {
 	return &Repository{db, logrus.New(), defaultJoins}
@@ -25,17 +23,35 @@ var (
 
 // FindAll find all entities
 func (r *Repository) FindAll(entity interface{}) error {
-	res := r.db.Unscoped().Find(entity)
+	res := r.db.
+		Unscoped().
+		Find(entity)
 	return r.handleError(res)
 }
 
-
 // FindById find by id entity
 func (r *Repository) FindById(entity interface{}, id uint64) error {
-	res := r.db.Where("id = ?", id).First(entity)
+	res := r.db.
+		Where("id = ?", id).
+		First(entity)
 	return r.handleOneError(res)
 }
 
+func (r *Repository) FindPaged(entity interface{}, limit, offset int) error {
+	res := r.db.
+		Unscoped().
+		Limit(limit).
+		Offset(offset).
+		Find(entity)
+	return r.handleError(res)
+}
+
+func (r *Repository) FindWhere(entity interface{}, condition string) error {
+	res := r.db.
+		Where(condition).
+		Find(entity)
+	return r.handleError(res)
+}
 
 // Create : create entity
 func (r *Repository) Create(entity interface{}) error {
@@ -43,10 +59,14 @@ func (r *Repository) Create(entity interface{}) error {
 	return r.handleError(res)
 }
 
-
-// Upsert update or create entity
-func (r *Repository) Upsert(entity interface{}) error {
+// Update : update entity
+func (r *Repository) Update(entity interface{}) error {
 	res := r.db.Save(entity)
+	return r.handleError(res)
+}
+
+func (r Repository) Delete(entity interface{}) error {
+	res := r.db.Delete(entity)
 	return r.handleError(res)
 }
 

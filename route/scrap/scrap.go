@@ -96,7 +96,7 @@ func SaveNaverNews(c *gin.Context) {
 }
 
 func saveNews(repo *database.Repository, newsResult NewsResult, c chan bool) {
-	err := repo.Upsert(&database.NewsScrapResult{
+	err := repo.Create(&database.NewsScrapResult{
 		Href:  newsResult.Href,
 		Title: newsResult.Title,
 	})
