@@ -39,7 +39,7 @@ func TestSaveScarpResult(t *testing.T) {
 }
 
 func testSave(repo *database.Repository, newsResult NewsResult, c chan error) {
-	err := repo.Upsert(&database.NewsScrapResult{
+	err := repo.Create(&database.NewsScrapResult{
 		Href:  newsResult.Href,
 		Title: newsResult.Title,
 	})

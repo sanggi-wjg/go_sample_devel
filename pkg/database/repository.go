@@ -3,7 +3,11 @@ package database
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"go_sample_devel/pkg/util"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"log"
+	"path"
 )
 
 type Repository struct {
@@ -14,6 +18,17 @@ type Repository struct {
 
 func NewRepository(db *gorm.DB, defaultJoins ...string) *Repository {
 	return &Repository{db, logrus.New(), defaultJoins}
+}
+
+func CreateMockRepository() *Repository {
+	mockDB, err := gorm.Open(
+		sqlite.Open(path.Join(util.GetBasePath(), "gorm.db")),
+		&gorm.Config{},
+	)
+	if err != nil {
+		log.Fatalf("fail to open gorm db: %v", err)
+	}
+	return &Repository{db: mockDB, logger: logrus.New()}
 }
 
 var (
