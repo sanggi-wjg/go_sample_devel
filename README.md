@@ -5,14 +5,17 @@
 ### 개발환경
 ```shell
 Windows + GoLand
-Go 1.8
+Go 1.7
+
 Gin Framework
 (https://github.com/gin-gonic/gin)
+
 GORM
 (https://gorm.io/docs/)
 ```
 
 ### ENV
+.env.template file 참고
 ```shell
 YOUTUBE_KEY=
 YOUTUBE_CHANNEL_ID=
@@ -79,7 +82,7 @@ https://github.com/PuerkitoBio/goquery
 
 ### 참고
 ```shell
-GORM test with sql mock 
+GORM test with sql mock (x) 
 https://github.com/DATA-DOG/go-sqlmock
 https://github.com/go-gorm/gorm/issues/3565
 ```
